@@ -23,6 +23,7 @@ int Merge(int arr[] , int l , int m , int r){
             j++;
             cnt+=(m + 1) - (l + i);
         }
+        k++;
     }
     while(i<n1){
         arr[k] = L[i];

@@ -8,37 +8,36 @@ public class Main {
         if(n==1){
             return 0;
         }
-        Stack<Character> p = new Stack();
+        if(s.charAt(0) == ')' || s.charAt(0) == ']' || s.charAt(0) == '}') return 0;
+        Stack<Character> B = new Stack();
+        Stack<Integer> index = new Stack();
         int res=0;
-        for (int i=0 ; i<n ; i++){
+        for(int i=0 ; i< n; i++){
             char t = s.charAt(i);
             switch (t){
                 case '(' : case '{' : case '[':
-                    p.push(t);
+                    B.push(t);
+                    index.push(i+1);
                     break;
                 case ')' : case ']': case '}' :
-                    if (p.isEmpty()){
-                        return i+1;
+                    if (B.isEmpty()) return i+1;
+                    else if(B.peek()=='(' && t == ')'){
+                        B.pop();
+                        index.pop();
                     }
-                    else if (t == ')'){
-                        if(p.peek()=='(') p.pop();
-                        else res = i+1;
+                    else if(B.peek()=='[' && t == ']'){
+                        B.pop();
+                        index.pop();
                     }
-                    else if (t == '}'){
-                        if(p.peek()=='{') p.pop();
-                        else res = i+1;
-                    }
-                    else if (t == ']'){
-                        if(p.peek()=='[') p.pop();
-                        else res = i+1;
-                    }
+                    else if(B.peek()=='{' && t == '}'){
+                        B.pop();
+                        index.pop();
+                    }else return i+1;
                     break;
             }
         }
-        if(p.isEmpty()){
-            return 1;
-        }
-        return res;
+        if(B.isEmpty()) return -2;
+        return index.peek();
     }
 
     public static void main(String[] args) {
@@ -47,7 +46,7 @@ public class Main {
         String s = input.nextLine();
         int res = obj.IsBalanced(s);
         if(res==0) System.out.println(1);
-        else if(res == 1) System.out.println("Success");
+        else if(res == -2) System.out.println("Success");
         else System.out.println(res);
     }
 }
